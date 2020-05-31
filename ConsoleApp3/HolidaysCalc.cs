@@ -8,15 +8,10 @@ namespace ConsoleApp3
 {
     class HolidaysCalc
     {
-        private int[] holidaysForQA { get; set; } = new int[366];
-        private int[] holidaysForDev { get; set; } = new int[366];
-        private int[] holidaysForTm { get; set; } = new int[366];
         public int qa { get; private set; }
         public int dev { get; private set; }
         public int tm { get; private set; }
-        string names;
         WorkerHoliday workerHoliday = new WorkerHoliday();
-        DateRange dateRange; //= new DateRange();
         private void content() { 
             workerHoliday.IdForH = 5;
             workerHoliday.PMId = 5;
@@ -30,14 +25,11 @@ namespace ConsoleApp3
         public bool HolidayCalc()
         {
             bool res = false;
-            dictionary = dateRecycle.getDictOfH(dateRecycle.WorkerHolidaysGetRequest());
+           // dictionary = getDictOfH(WorkerHolidaysGetRequest());
             content();
            
             if(psevd(workerHoliday))
-            {
-                Console.WriteLine("psved returned TRUE");
-                Console.WriteLine("NAMES: "+names);
-                res = true; }
+            {  res = true; }
             else { res = false; }
             
             return res;
@@ -103,10 +95,42 @@ namespace ConsoleApp3
                     }
                     break;
                 case "Developer":
-
+                    countingWorkers();
+                    if (tm < 1)
+                    {
+                        if (qa < 2)
+                        {
+                           if(dev < 3)
+                            {
+                                res = true;
+                            }
+                            else
+                            {
+                                res = false;
+                            }
+                        }
+                        else 
+                        {
+                            if(dev < 1)
+                            {
+                                res = true;
+                            }
+                            else
+                            {
+                                res = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        res = false;
+                    }
+                    break;
+                case "TeamLead":
+                    countingWorkers();
                     if (dev < 1)
                     {
-                        if (qa < 4)
+                        if (tm < 2)
                         {
                             res = true;
                         }
@@ -117,20 +141,9 @@ namespace ConsoleApp3
                     }
                     else
                     {
-                        if (qa < 2)
-                        {
-                            res = true;
-                        }
-                        else
-                        {
-                            res = false;
-                        }
+                        res = false;
                     }
                     break;
-                case "TeamLead":
-
-                    break;
-
                 default: break;
             }
             
