@@ -10,6 +10,7 @@ namespace ConsoleApp3
         public int PMId { get; set; }
         public string FIO { get; set; }
         public string Position { get; set; }
-        public string Date { get; set; }
+        public DateTime DateStart { get; set; }
+        public DateTime DateEnd { get; set; }
     }
 }

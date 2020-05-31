@@ -13,7 +13,7 @@ namespace ConsoleApp3
     {
 
         private int[] numberOfMonth = new int[365]; // 365
-        private int numberOfWorkers { get; set; } // 365
+        public int numberOfWorkers { get; private set; } // 365
         private string workers { get; set; }
         Dictionary<int, Dictionary<string, string>> myDict = new Dictionary<int, Dictionary<string, string>>();
         //Item item = new Item();
@@ -34,55 +34,6 @@ namespace ConsoleApp3
               */
             //str = string.Join(" ", time);
             return str.Trim();
-        }
-        private string months(string month)
-        {
-            switch (month)
-            {
-                case "Jan":
-                    month = "01";
-                    for (int i = 1; i <= 31; i++)
-                    {
-                        numberOfMonth[i] = i;
-                    }
-                    break;
-                case "Feb":
-                    month = "02";
-                    break;
-                case "Mar":
-                    month = "03";
-                    break;
-                case "Apr":
-                    month = "04";
-                    break;
-                case "May":
-                    month = "05";
-                    break;
-                case "Jun":
-                    month = "06";
-                    break;
-                case "Jul":
-                    month = "07";
-                    break;
-                case "Aug":
-                    month = "08";
-                    break;
-                case "Sep":
-                    month = "09";
-                    break;
-                case "Oct":
-                    month = "10";
-                    break;
-                case "Nov":
-                    month = "11";
-                    break;
-                case "Dec":
-                    month = "12";
-                    break;
-                default:
-                    break;
-            }
-            return month;
         }
         public string WorkerHolidaysGetRequest()
         {
@@ -105,7 +56,7 @@ namespace ConsoleApp3
             var result = objects.Select(obj => JsonConvert.SerializeObject(obj)).ToArray();
             numberOfWorkers = result.Length;
             JObject jsonObj;
-            for (int i=0; i<result.Length; i++)
+            for (int i=0; i< numberOfWorkers; i++)
             {
                 jsonObj = JObject.Parse(result[i]);
                 Dictionary<string, string> dictObj = jsonObj.ToObject<Dictionary<string, string>>();
