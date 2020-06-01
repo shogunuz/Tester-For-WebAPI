@@ -16,6 +16,8 @@ namespace ConsoleApp3
         public int tm { get; private set; }
         public int numberOfWorkers { get; private set; } // 365
         private string workers { get; set; }
+        public int selfself { get; private set; } = 0;
+        public int idNumber { get; private set; }
 
         private Dictionary<int, Dictionary<string, string>> dictionary = new Dictionary<int, Dictionary<string, string>>();
 
@@ -79,18 +81,23 @@ namespace ConsoleApp3
         {
             for (int i = 0; i < numberOfWorkers; i++)
             {
-                //DateTime parsedDateStart = DateTime.Parse(dictionary[i]["DateStart"]);
+                Int32.TryParse(dictionary[i]["PMId"], out int cnt);
                 DateTime parsedDateStart = DateTime.ParseExact((dictionary[i]["DateStart"]).ToString(), "MM/dd/yyyy HH:mm:ss", null);
                 DateTime parsedDateEnd = DateTime.ParseExact((dictionary[i]["DateEnd"]).ToString(), "MM/dd/yyyy HH:mm:ss", null);
 
-                DateTime parsedDateStartWorker = DateTime.Parse((workerHoliday.DateStart).ToString());
-                DateTime parsedDateEndWorker = DateTime.Parse((workerHoliday.DateEnd).ToString());
-                //DateTime parsedDateEndWorker = DateTime.ParseExact((workerHoliday.DateEnd).ToString(), "MM/dd/yyyy HH:mm:ss", null);
-
-                if ((parsedDateStart <= parsedDateStartWorker && parsedDateStartWorker <= parsedDateEnd)
-                   || (parsedDateStart <= parsedDateEndWorker && parsedDateEndWorker <= parsedDateEnd))
+                if ((parsedDateStart <= workerHoliday.DateStart && workerHoliday.DateStart <= parsedDateEnd)
+                   || (parsedDateStart <= workerHoliday.DateEnd && workerHoliday.DateEnd <= parsedDateEnd))
                 {
                     schetchik(dictionary[i]["Position"]);
+                    if (cnt == workerHoliday.PMId)
+                        selfself++;
+                }
+                else if ((workerHoliday.DateStart <= parsedDateStart && parsedDateStart <= workerHoliday.DateEnd)
+                 || (workerHoliday.DateStart <= parsedDateEnd && parsedDateEnd <= workerHoliday.DateEnd))
+                {
+                    schetchik(dictionary[i]["Position"]);
+                    if (cnt == workerHoliday.PMId)
+                        selfself++;
                 }
             }
         }
@@ -100,12 +107,11 @@ namespace ConsoleApp3
             switch (woker.Position)
             {
                 case "QA":
-                    Console.WriteLine("CASE: QA");
                     countingWorkers(woker);
-                    if (dev < 1)
+                    if (dev == 0 && selfself == 0)
                     {
-                        Console.WriteLine("CASE: QA -> dev<1");
-                        if (qa < 4)
+                        Console.WriteLine("QA   dev == 0 && selfself == 0\n");
+                        if (qa < 3)
                         {
                             res = true;
                         }
@@ -116,8 +122,8 @@ namespace ConsoleApp3
                     }
                     else
                     {
-                        Console.WriteLine("CASE: QA -> dev>=1");
-                        if (qa < 2)
+                        Console.WriteLine(" !!! dev == 0 && selfself == 0\n");
+                        if (qa < 1)
                         {
                             res = true;
                         }
@@ -126,14 +132,17 @@ namespace ConsoleApp3
                             res = false;
                         }
                     }
+
                     break;
                 case "Developer":
                     countingWorkers(woker);
-                    if (tm < 1)
+                    if (tm == 0 && selfself == 0)
                     {
+                        Console.WriteLine(" DEV tm == 0 && selfself == 0\n");
                         if (qa < 2)
                         {
-                            if (dev < 3)
+                            Console.WriteLine(" DEV  dev < 2\n");
+                            if (dev < 2)
                             {
                                 res = true;
                             }
@@ -144,7 +153,8 @@ namespace ConsoleApp3
                         }
                         else
                         {
-                            if (dev < 1)
+                            Console.WriteLine(" DEV !!!! dev < 2\n");
+                            if (dev == 0)
                             {
                                 res = true;
                             }
@@ -156,14 +166,16 @@ namespace ConsoleApp3
                     }
                     else
                     {
+                        Console.WriteLine(" DEV !!! tm == 0 && selfself == 0\n");
                         res = false;
                     }
                     break;
                 case "TeamLead":
                     countingWorkers(woker);
-                    if (dev < 1)
+                    if (dev == 0 && selfself == 0)
                     {
-                        if (tm < 2)
+                        Console.WriteLine(" TL tm == 0 && selfself == 0\n");
+                        if (tm < 1)
                         {
                             res = true;
                         }
@@ -174,12 +186,12 @@ namespace ConsoleApp3
                     }
                     else
                     {
+                        Console.WriteLine(" TL !!!! tm == 0 && selfself == 0\n");
                         res = false;
                     }
                     break;
                 default: break;
             }
-
             return res;
         }
 
