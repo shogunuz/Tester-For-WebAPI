@@ -3,15 +3,13 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 
 namespace ConsoleApp3
 {
     public class GetListOfWorkers
     {
-        public int NumberOfWorkers { get; private set; } // 365
+        public int NumberOfWorkers { get; private set; } 
         private Dictionary<int, Dictionary<string, string>> GetListOfHolidaysTew()
         {
             Dictionary<int, Dictionary<string, string>> dictionary = new Dictionary<int, Dictionary<string, string>>();
