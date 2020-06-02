@@ -9,8 +9,8 @@ namespace ConsoleApp3
         static void Main(string[] args)
         {
             Console.WriteLine(dateRecycle.HolidayCalc());
-            Console.WriteLine("Все сотрудника из отпуска:\n" + "QA: " + dateRecycle.qa + " Dev:" +
-               dateRecycle.dev + " TM:" + dateRecycle.tm);
+            Console.WriteLine("Все сотрудника из отпуска:\n" + "QA: " + dateRecycle.Qa + " Dev:" +
+               dateRecycle.Dev + " TM:" + dateRecycle.TL);
             Console.ReadLine();
         }
     }

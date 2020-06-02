@@ -11,17 +11,18 @@ namespace ConsoleApp3
 {
     public class DateRecycle
     {
-        public int qa { get; private set; }
-        public int dev { get; private set; }
-        public int tm { get; private set; }
-        public int numberOfWorkers { get; private set; } // 365
-        private string workers { get; set; }
-        public int selfself { get; private set; } = 0;
-        public int idNumber { get; private set; }
 
+        public int Qa { get; private set; }
+        public int Dev { get; private set; }
+        public int TL { get; private set; }
+        public int Selfself { get; private set; }
+        public int IdNumber { get; private set; }
+        public int NumberOfWorkers { get; private set; }
+
+        private readonly GetListOfWorkers getListOfWorkers = new GetListOfWorkers();
         private Dictionary<int, Dictionary<string, string>> dictionary = new Dictionary<int, Dictionary<string, string>>();
 
-        WorkerHoliday workerHoliday = new WorkerHoliday();
+        private WorkerHoliday workerHoliday = new WorkerHoliday();
         private void content()
         {
             workerHoliday.IdForH = 5;
@@ -31,87 +32,64 @@ namespace ConsoleApp3
             workerHoliday.DateStart = DateTime.Parse("2020-06-01T12:39:38");
             workerHoliday.DateEnd = DateTime.Parse("2020-06-11T12:39:38");
         }
-
-        public string WorkerHolidaysGetRequest()
-        {
-            WebRequest request = WebRequest.Create("https://localhost:44342/api/WorkerHolidays");
-            WebResponse response = request.GetResponse();
-            using (Stream dataStream = response.GetResponseStream())
-            {
-                StreamReader reader = new StreamReader(dataStream);
-                string responseFromServer = reader.ReadToEnd();
-                workers = responseFromServer;
-            }
-            response.Close();
-
-            return workers;
-        }
-        private void getDictOfH(string jsonInput)
-        {
-            Console.WriteLine(jsonInput + "\n\n");
-            var objects = JsonConvert.DeserializeObject<List<object>>(jsonInput);
-            var result = objects.Select(obj => JsonConvert.SerializeObject(obj)).ToArray();
-            numberOfWorkers = result.Length;
-            JObject jsonObj;
-            for (int i = 0; i < numberOfWorkers; i++)
-            {
-                jsonObj = JObject.Parse(result[i]);
-                Dictionary<string, string> dictObj = jsonObj.ToObject<Dictionary<string, string>>();
-                dictionary.Add(i, new Dictionary<string, string>(dictObj));
-            }
-
-        }
-        private void schetchik(string position)
+        private void Schetchik(string position)
         {
             switch (position)
             {
                 case "QA":
-                    qa++;
+                    Qa++;
                     break;
                 case "Developer":
-                    dev++;
+                    Dev++;
                     break;
                 case "TeamLead":
-                    tm++;
+                    TL++;
                     break;
                 default: break;
             }
         }
-        private void countingWorkers(WorkerHoliday workerHoliday)
+        private void CountingWorkers(WorkerHoliday workerHoliday)
         {
-            for (int i = 0; i < numberOfWorkers; i++)
+            for (int i = 0; i < NumberOfWorkers; i++)
             {
-                Int32.TryParse(dictionary[i]["PMId"], out int cnt);
-                DateTime parsedDateStart = DateTime.ParseExact((dictionary[i]["DateStart"]).ToString(), "MM/dd/yyyy HH:mm:ss", null);
-                DateTime parsedDateEnd = DateTime.ParseExact((dictionary[i]["DateEnd"]).ToString(), "MM/dd/yyyy HH:mm:ss", null);
-
+                 Int32.TryParse((dictionary[i]["PMId"]), out int cnt);
+                //DateTime parsedDateStart = DateTime.ParseExact(dictionary[i]["DateStart"], "MM/dd/yyyy HH:mm:ss", null);
+                DateTime parsedDateStart = DateTime.Parse(dictionary[i]["DateStart"]);
+                //DateTime parsedDateEnd = DateTime.ParseExact(dictionary[i]["DateEnd"], "MM/dd/yyyy HH:mm:ss", null);
+                DateTime parsedDateEnd = DateTime.Parse(dictionary[i]["DateEnd"]);
                 if ((parsedDateStart <= workerHoliday.DateStart && workerHoliday.DateStart <= parsedDateEnd)
                    || (parsedDateStart <= workerHoliday.DateEnd && workerHoliday.DateEnd <= parsedDateEnd))
                 {
-                    schetchik(dictionary[i]["Position"]);
+                    /*
+                     * Каждый раз включаю счётчик чтобы в итоге знать сколько всего сотрудников
+                     * отправлено на отпуск в том периоде, в который собираемся добавить текущего(нового)
+                     * сотрудника.
+                     */
+                    Schetchik(dictionary[i]["Position"]);
+
+                    //Проверяем добавили ли сотрудника, которого уже отправили в отпуск в этом периоде
                     if (cnt == workerHoliday.PMId)
-                        selfself++;
+                        Selfself++;
                 }
                 else if ((workerHoliday.DateStart <= parsedDateStart && parsedDateStart <= workerHoliday.DateEnd)
                  || (workerHoliday.DateStart <= parsedDateEnd && parsedDateEnd <= workerHoliday.DateEnd))
                 {
-                    schetchik(dictionary[i]["Position"]);
+                    Schetchik(dictionary[i]["Position"]);
                     if (cnt == workerHoliday.PMId)
-                        selfself++;
+                        Selfself++;
                 }
             }
         }
-        private bool psevd(WorkerHoliday woker)
+        private bool Proverka(WorkerHoliday worker)
         {
             bool res = false;
-            switch (woker.Position)
+            switch (worker.Position)
             {
                 case "QA":
-                    countingWorkers(woker);
-                    if (dev == 0 && selfself == 0)
+                    CountingWorkers(worker);
+                    if (Dev == 0 && Selfself == 0)
                     {
-                        Console.WriteLine("QA   dev == 0 && selfself == 0\n");
-                        if (qa < 3)
+                        if (Qa < 3)
                         {
                             res = true;
                         }
@@ -122,8 +100,7 @@ namespace ConsoleApp3
                     }
                     else
                     {
-                        Console.WriteLine(" !!! dev == 0 && selfself == 0\n");
-                        if (qa < 1)
+                        if (Qa < 1)
                         {
                             res = true;
                         }
@@ -135,14 +112,12 @@ namespace ConsoleApp3
 
                     break;
                 case "Developer":
-                    countingWorkers(woker);
-                    if (tm == 0 && selfself == 0)
+                    CountingWorkers(worker);
+                    if (TL == 0 && Selfself == 0)
                     {
-                        Console.WriteLine(" DEV tm == 0 && selfself == 0\n");
-                        if (qa < 2)
+                        if (Qa < 2)
                         {
-                            Console.WriteLine(" DEV  dev < 2\n");
-                            if (dev < 2)
+                            if (Dev < 2)
                             {
                                 res = true;
                             }
@@ -153,8 +128,7 @@ namespace ConsoleApp3
                         }
                         else
                         {
-                            Console.WriteLine(" DEV !!!! dev < 2\n");
-                            if (dev == 0)
+                            if (Dev == 0)
                             {
                                 res = true;
                             }
@@ -166,16 +140,14 @@ namespace ConsoleApp3
                     }
                     else
                     {
-                        Console.WriteLine(" DEV !!! tm == 0 && selfself == 0\n");
                         res = false;
                     }
                     break;
                 case "TeamLead":
-                    countingWorkers(woker);
-                    if (dev == 0 && selfself == 0)
+                    CountingWorkers(worker);
+                    if (Dev == 0 && Selfself == 0)
                     {
-                        Console.WriteLine(" TL tm == 0 && selfself == 0\n");
-                        if (tm < 1)
+                        if (TL < 1)
                         {
                             res = true;
                         }
@@ -186,23 +158,27 @@ namespace ConsoleApp3
                     }
                     else
                     {
-                        Console.WriteLine(" TL !!!! tm == 0 && selfself == 0\n");
                         res = false;
                     }
                     break;
                 default: break;
             }
+
             return res;
         }
 
         public bool HolidayCalc()
         {
             bool res = false;
-            getDictOfH(WorkerHolidaysGetRequest());
+            try
+            {
+                dictionary = getListOfWorkers.GetListOfHolidaysPublic();
+                NumberOfWorkers = getListOfWorkers.NumberOfWorkers;
+            }
+            catch (Exception) { }
             content();
-            if (psevd(workerHoliday))
+           if (Proverka(workerHoliday) == true)
             { res = true; }
-
             return res;
         }
 

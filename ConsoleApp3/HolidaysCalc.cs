@@ -52,7 +52,7 @@ namespace ConsoleApp3
         }
         private void countingWorkers()
         {
-            for (int i = 0; i < dateRecycle.numberOfWorkers; i++)
+            for (int i = 0; i < dateRecycle.NumberOfWorkers; i++)
             {
                 DateTime parsedDateStart = DateTime.Parse(dictionary[i]["DateStart"]);
                 DateTime parsedDateEnd = DateTime.ParseExact(((dictionary[i]["DateEnd"]).ToString()), "MM/dd/yyyy HH:mm:ss", null);
