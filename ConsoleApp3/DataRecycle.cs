@@ -5,13 +5,11 @@ namespace ConsoleApp3
 {
     public class DateRecycle
     {
+        
+        
+        private int NumberOfWorkers;
 
-        public int Qa { get; private set; }
-        public int Dev { get; private set; }
-        public int TL { get; private set; }
-        public int Selfself { get; private set; }
-        public int IdNumber { get; private set; }
-        public int NumberOfWorkers { get; private set; }
+        private NumbersOfPositions numOfWorkers = new NumbersOfPositions();
 
         private readonly GetListOfWorkers getListOfWorkers = new GetListOfWorkers();
         private Dictionary<int, Dictionary<string, string>> dictionary = new Dictionary<int, Dictionary<string, string>>();
@@ -31,13 +29,13 @@ namespace ConsoleApp3
             switch (position)
             {
                 case "QA":
-                    Qa++;
+                    numOfWorkers.QA++;
                     break;
                 case "Developer":
-                    Dev++;
+                    numOfWorkers.Dev++;
                     break;
                 case "TeamLead":
-                    TL++;
+                    numOfWorkers.TL++;
                     break;
                 default: break;
             }
@@ -63,14 +61,14 @@ namespace ConsoleApp3
 
                     //Проверяем добавили ли сотрудника, которого уже отправили в отпуск в этом периоде
                     if (cnt == workerHoliday.PMId)
-                        Selfself++;
+                        numOfWorkers.Selfself++;
                 }
                 else if ((workerHoliday.DateStart <= parsedDateStart && parsedDateStart <= workerHoliday.DateEnd)
                  || (workerHoliday.DateStart <= parsedDateEnd && parsedDateEnd <= workerHoliday.DateEnd))
                 {
                     Schetchik(dictionary[i]["Position"]);
                     if (cnt == workerHoliday.PMId)
-                        Selfself++;
+                        numOfWorkers.Selfself++;
                 }
             }
         }
@@ -81,9 +79,9 @@ namespace ConsoleApp3
             {
                 case "QA":
                     CountingWorkers(worker);
-                    if (Dev == 0 && Selfself == 0)
+                    if (numOfWorkers.Dev == 0 && numOfWorkers.Selfself == 0)
                     {
-                        if (Qa < 3)
+                        if (numOfWorkers.QA < 3)
                         {
                             res = true;
                         }
@@ -94,7 +92,7 @@ namespace ConsoleApp3
                     }
                     else
                     {
-                        if (Qa < 1)
+                        if (numOfWorkers.QA < 1)
                         {
                             res = true;
                         }
@@ -107,11 +105,11 @@ namespace ConsoleApp3
                     break;
                 case "Developer":
                     CountingWorkers(worker);
-                    if (TL == 0 && Selfself == 0)
+                    if (numOfWorkers.TL == 0 && numOfWorkers.Selfself == 0)
                     {
-                        if (Qa < 2)
+                        if (numOfWorkers.QA < 2)
                         {
-                            if (Dev < 2)
+                            if (numOfWorkers.Dev < 2)
                             {
                                 res = true;
                             }
@@ -122,7 +120,7 @@ namespace ConsoleApp3
                         }
                         else
                         {
-                            if (Dev == 0)
+                            if (numOfWorkers.Dev == 0)
                             {
                                 res = true;
                             }
@@ -139,9 +137,9 @@ namespace ConsoleApp3
                     break;
                 case "TeamLead":
                     CountingWorkers(worker);
-                    if (Dev == 0 && Selfself == 0)
+                    if (numOfWorkers.Dev == 0 && numOfWorkers.Selfself == 0)
                     {
-                        if (TL < 1)
+                        if (numOfWorkers.TL < 1)
                         {
                             res = true;
                         }
@@ -173,6 +171,8 @@ namespace ConsoleApp3
             content();
            if (Proverka(workerHoliday) == true)
             { res = true; }
+            Console.WriteLine("Все сотрудника из отпуска:\n" + "QA: " + numOfWorkers.QA + " Dev:" +
+                numOfWorkers.Dev + " TM:" + numOfWorkers.TL);
             return res;
         }
 

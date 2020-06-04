@@ -6,11 +6,18 @@ namespace ConsoleApp3
 {
     class WorkerHoliday
     {
-        public int IdForH { get; set; }
-        public int PMId { get; set; }
-        public string FIO { get; set; }
-        public string Position { get; set; }
-        public DateTime DateStart { get; set; }
-        public DateTime DateEnd { get; set; }
+        private int IdH;
+        private int Id;
+        private string Fio;
+        private string position;
+        private DateTime startDate;
+        private DateTime endDate;
+
+        public int IdForH { get => IdH; set => IdH = value; }
+        public int PMId { get => Id; set => Id = value; }
+        public string FIO { get => Fio; set => Fio = value; }
+        public string Position { get => position; set => position = value; }
+        public DateTime DateStart { get => startDate; set => startDate = value; }
+        public DateTime DateEnd { get => endDate; set => endDate = value; }
     }
 }

@@ -9,7 +9,15 @@ namespace ConsoleApp3
 {
     public class GetListOfWorkers
     {
-        public int NumberOfWorkers { get; private set; } 
+        private int numberOfWorkers;
+        public int NumberOfWorkers
+        {
+            get { return numberOfWorkers; }
+            set
+            {
+                numberOfWorkers = value;
+            }
+        }
         private Dictionary<int, Dictionary<string, string>> GetListOfHolidaysTew()
         {
             Dictionary<int, Dictionary<string, string>> dictionary = new Dictionary<int, Dictionary<string, string>>();
