@@ -7,7 +7,8 @@ using System.Net;
 
 namespace ConsoleApp3
 {
-    public class GetListOfWorkers
+    // sealed - невозможно создать наследника для GetListOfWorkers
+    sealed public class GetListOfWorkers 
     {
         private int numberOfWorkers;
         public int NumberOfWorkers

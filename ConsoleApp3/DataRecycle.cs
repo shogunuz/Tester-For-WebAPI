@@ -5,24 +5,35 @@ namespace ConsoleApp3
 {
     public class DateRecycle
     {
-        
-        
-        private int NumberOfWorkers;
+        private int _numberOfWorkers;
+        private int NumberOfWorkers { 
+            get => _numberOfWorkers; 
+            set => _numberOfWorkers = value;
+        }
+       // private readonly double PI;
+        private NumbersOfPositions numOfWorkers { get; set; }
 
-        private NumbersOfPositions numOfWorkers = new NumbersOfPositions();
+        private GetListOfWorkers getListOfWorkers { get; set; }
 
-        private readonly GetListOfWorkers getListOfWorkers = new GetListOfWorkers();
-        private Dictionary<int, Dictionary<string, string>> dictionary = new Dictionary<int, Dictionary<string, string>>();
+        private Dictionary<int, Dictionary<string, string>> dictionary { get; set; }
 
-        private WorkerHoliday workerHoliday = new WorkerHoliday();
+        private WorkerHoliday workerHoliday { get; set; }
+        public DateRecycle()
+        {
+            //PI = 3.14;
+            workerHoliday = new WorkerHoliday();
+            dictionary = new Dictionary<int, Dictionary<string, string>>();
+            getListOfWorkers = new GetListOfWorkers();
+            numOfWorkers = new NumbersOfPositions();
+        }
         private void content()
         {
             workerHoliday.IdForH = 5;
             workerHoliday.PMId = 5;
             workerHoliday.FIO = "Figo Fbio";
             workerHoliday.Position = "QA";
-            workerHoliday.DateStart = DateTime.Parse("2020-06-01T12:39:38");
-            workerHoliday.DateEnd = DateTime.Parse("2020-06-11T12:39:38");
+            workerHoliday.DateStart = DateTime.Parse("2020-09-01T12:39:38");
+            workerHoliday.DateEnd = DateTime.Parse("2020-09-11T12:39:38");
         }
         private void Schetchik(string position)
         {
