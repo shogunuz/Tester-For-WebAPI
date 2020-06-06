@@ -10,6 +10,10 @@ namespace ConsoleApp3
     // sealed - невозможно создать наследника для GetListOfWorkers
     sealed public class GetListOfWorkers 
     {
+        public GetListOfWorkers()
+        {
+            NumberOfWorkers = 0;
+        }
         private int numberOfWorkers;
         public int NumberOfWorkers
         {
@@ -23,8 +27,7 @@ namespace ConsoleApp3
         {
             Dictionary<int, Dictionary<string, string>> dictionary = new Dictionary<int, Dictionary<string, string>>();
             WebRequest request = WebRequest.Create("https://localhost:44342/api/WorkerHolidays");
-            WebResponse response = request.GetResponse();
-            int i = 0;
+            using(WebResponse response = request.GetResponse())
             using (Stream stream = response.GetResponseStream())
             using (StreamReader streamReader = new StreamReader(stream))
             using (JsonTextReader reader = new JsonTextReader(streamReader))
@@ -37,7 +40,7 @@ namespace ConsoleApp3
                     if (reader.TokenType == JsonToken.StartObject)
                     {
                         WorkerHoliday worker = serializer.Deserialize<WorkerHoliday>(reader);
-                        dictionary.Add(i, new Dictionary<string, string>
+                        dictionary.Add(NumberOfWorkers, new Dictionary<string, string>
                         {
                             ["PMId"] = (worker.PMId).ToString(),
                             ["IdForH"] = (worker.IdForH).ToString(),
@@ -46,12 +49,11 @@ namespace ConsoleApp3
                             ["DateStart"] = (worker.DateStart).ToString(),
                             ["DateEnd"] = (worker.DateEnd).ToString()
                         });
-                        i++;
                         NumberOfWorkers++;
                     }
                 }
             }
-            response.Close();
+            request = null;
             return dictionary;
         }
 
